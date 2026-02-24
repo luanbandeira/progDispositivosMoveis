@@ -5,7 +5,10 @@ import {
   TextInput, 
   TouchableOpacity, 
   StyleSheet, 
-  Keyboard 
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 export default function Index() {
@@ -13,9 +16,7 @@ export default function Index() {
   const [anoNascimento, setAnoNascimento] = useState<number | null>(null);
 
   const calcularAno = () => {
-    // Fecha o teclado imediatamente
     Keyboard.dismiss();
-
     const anoAtual = new Date().getFullYear();
     const idadeNum = parseInt(idade);
 
@@ -27,30 +28,37 @@ export default function Index() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Calculadora de Nascimento</Text>
+    // O behavior "padding" é o padrão ideal para iOS, enquanto Android costuma lidar bem sem ele ou com "height"
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Text style={styles.titulo}>Calculadora de Nascimento</Text>
 
-      {/* Input com Label via Placeholder */}
-      <TextInput
-        style={styles.input}
-        placeholder="Digite sua idade aqui..."
-        keyboardType="numeric"
-        value={idade}
-        onChangeText={setIdade}
-        onSubmitEditing={calcularAno} // Fecha teclado ao apertar "OK" no teclado
-      />
+          <TextInput
+            style={styles.input}
+            placeholder="Digite sua idade aqui..."
+            keyboardType="numeric"
+            value={idade}
+            onChangeText={setIdade}
+            onSubmitEditing={calcularAno}
+          />
 
-      <TouchableOpacity style={styles.botao} onPress={calcularAno}>
-        <Text style={styles.textoBotao}>Calcular</Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.botao} onPress={calcularAno}>
+            <Text style={styles.textoBotao}>Calcular</Text>
+          </TouchableOpacity>
 
-      {anoNascimento !== null && (
-        <View style={styles.resultadoContainer}>
-          <Text style={styles.resultadoTexto}>Ano aproximado:</Text>
-          <Text style={styles.ano}>{anoNascimento}</Text>
+          {anoNascimento !== null && (
+            <View style={styles.resultadoContainer}>
+              <Text style={styles.resultadoTexto}>Ano aproximado:</Text>
+              <Text style={styles.ano}>{anoNascimento}</Text>
+            </View>
+          )}
         </View>
-      )}
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -62,6 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F7",
     padding: 20,
   },
+  // ... (restante dos seus estilos permanecem iguais)
   titulo: {
     fontSize: 20,
     fontWeight: "bold",
