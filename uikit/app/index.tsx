@@ -82,6 +82,14 @@ export default function Index() {
       <TouchableOpacity style={styles.buttonOutline}>
         <Text style={styles.buttonOutlineText}>Já tenho conta</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.buttonGosto}
+        onPress={() => router.push('/gosto')}
+      >
+        <Text style={styles.buttonText}>🎯  Gosto / Não Gosto</Text>
+      </TouchableOpacity>
+
     </ScrollView>
   );
 }
@@ -166,9 +174,17 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
+    marginBottom: 12,
   },
   buttonOutlineText: {
     fontSize: 14,
     color: '#6b7280',
+  },
+  buttonGosto: {
+    backgroundColor: '#805ad5',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 8,
   },
 });
